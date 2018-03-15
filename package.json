@@ -1,0 +1,16 @@
+{
+    "name": "prj_havu",
+    "version": "1.0.0",
+    "description": "",
+    "main": "send.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "amqplib": "^0.5.2",
+        "babel-eslint": "^8.2.2",
+        "eslint": "^4.18.2"
+    }
+}
