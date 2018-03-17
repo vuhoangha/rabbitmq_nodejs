@@ -1,18 +1,37 @@
+#!/usr/bin/env node
 
 const amqp = require('amqplib/callback_api');
+const EXCHANGE = 'logs';
 
-amqp.connect('amqp://guest:guest@192.168.99.100:5672', (errr, conn) => {
-    conn.createChannel((err, ch) => {
-        if (err) console.log('loi he thong', err);
+amqp.connect('amqp://guest:guest@192.168.99.100:5672', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+        ch.assertExchange(EXCHANGE, 'fanout', { durable: false });
 
-        const queueName = 'havu2';
-        ch.assertQueue(queueName, { durable: false });
-        ch.consume(queueName, msg => {
-            console.log(' [x] Received %s', msg.content.toString());
-            setTimeout(() => {
-                console.log(' [x] Done %s', msg.content.toString());
-                ch.ack(msg);
-            }, 5000);
-        }, { noAck: false });
+        ch.assertQueue('', { exclusive: true }, function (err, q) {
+            console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+            ch.bindQueue(q.queue, EXCHANGE, '');
+
+            ch.consume(q.queue, function (msg) {
+                console.log("1_ [x] %s", msg.content.toString());
+            }, { noAck: true });
+        });
+
+        ch.assertQueue('', { exclusive: true }, function (err, q) {
+            console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+            ch.bindQueue(q.queue, EXCHANGE, '');
+
+            ch.consume(q.queue, function (msg) {
+                console.log("2_ [x] %s", msg.content.toString());
+            }, { noAck: true });
+        });
+
+        ch.assertQueue('', { exclusive: true }, function (err, q) {
+            console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+            ch.bindQueue(q.queue, EXCHANGE, '');
+
+            ch.consume(q.queue, function (msg) {
+                console.log("3_ [x] %s", msg.content.toString());
+            }, { noAck: true });
+        });
     });
 });
