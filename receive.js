@@ -1,18 +1,21 @@
+#!/usr/bin/env node
 
 const amqp = require('amqplib/callback_api');
+const EXCHANGE = 'direct_logs';
 
-amqp.connect('amqp://guest:guest@192.168.99.100:5672', (errr, conn) => {
-    conn.createChannel((err, ch) => {
-        if (err) console.log('loi he thong', err);
+const severity = process.argv[2];
 
-        const queueName = 'havu2';
-        ch.assertQueue(queueName, { durable: false });
-        ch.consume(queueName, msg => {
-            console.log(' [x] Received %s', msg.content.toString());
-            setTimeout(() => {
-                console.log(' [x] Done %s', msg.content.toString());
-                ch.ack(msg);
-            }, 5000);
-        }, { noAck: false });
+amqp.connect('amqp://guest:guest@192.168.99.100:5672', function (err, conn) {
+    conn.createChannel(function (err, ch) {
+        ch.assertExchange(EXCHANGE, 'direct', { durable: false });
+
+        ch.assertQueue('', { exclusive: true }, function (err, q) {
+            console.log(' [*] Waiting for logs. To exit press CTRL+C');
+            ch.bindQueue(q.queue, EXCHANGE, severity);
+
+            ch.consume(q.queue, function (msg) {
+                console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+            }, { noAck: true });
+        });
     });
 });
