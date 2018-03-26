@@ -1,4 +1,5 @@
-# Deploy GitLab To Kubernetes
+
+<span style="color:red"># Deploy GitLab To Kubernetes</span>
 
 ## B1: Init Helm
 
