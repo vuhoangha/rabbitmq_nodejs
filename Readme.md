@@ -2,7 +2,7 @@
 
 ## B1: Init Helm
 
-sh install.sh
+    sh install.sh
 
 
 -   B2: run 'sh run.sh' de deploy Gitlab len Kubernetes (chu y tao namespace tren Kubernetes tuong ung)
