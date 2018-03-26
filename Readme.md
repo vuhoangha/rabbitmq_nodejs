@@ -1,4 +1,10 @@
 
+<!-- slide -->
+
+#Deploy GitLab To Kubernetes
+
+<!-- slide -->
+
 -   B1: run 'sh install.sh' de khoi tao Helm
 -   B2: run 'sh run.sh' de deploy Gitlab len Kubernetes (chu y tao namespace tren Kubernetes tuong ung)
 -   B3: exec vao Pod dang chay (gitlab-gitlab)
